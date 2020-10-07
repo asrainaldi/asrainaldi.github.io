@@ -13,22 +13,63 @@
     <div>
         <span id="score">Score: 0</span>
     </div>
+    <div>
+        <span id="resultText" hidden style="color:red">you lose! </span>
+    </div>
     <span id="player" style="position:absolute; left: 20px; top:200px">
         [T]
+    </span>
+    <span style="position:absolute; left: 20px; top:220px">
+        --------------------------------------------------
     </span>
 </body>
 </html>
 
 <script>
+
+    moveEnemies();
+    var numberOfEnemiesRemaining = document.getElementsByName("enemy").length;
+
+    async function moveEnemies() {
+        var enemies = document.getElementsByName("enemy");
+
+        for (var k = 0; k < 15; k++) {
+
+            for (var j = 0; j < 20; j++) {
+                for (var i = 0; i < enemies.length; i++) {
+                    enemies[i].style.left = parseFloat(enemies[i].style.left) + 10 + "px";
+                }
+                await sleep(250);
+            }
+            for (var j = 0; j < 20; j++) {
+                for (var i = 0; i < enemies.length; i++) {
+                    enemies[i].style.left = parseFloat(enemies[i].style.left) - 10 + "px";
+                }
+                await sleep(250);
+            }
+
+            for (var i = 0; i < enemies.length; i++) {
+                enemies[i].style.top = parseFloat(enemies[i].style.top) + 10 + "px";
+            }
+            await sleep(250);
+
+        }
+
+        if (numberOfEnemiesRemaining != 0) {
+            document.getElementById("resultText").removeAttribute("hidden"); 
+        }
+    }
+
     function keyPressed() {
         var key = window.event.keyCode
         var player = document.getElementById("player");
 
         // 37 left 39 right 32 spacebar
-        if (key === 37) {
+        var test = parseFloat(player.style.left);
+        if (key === 37 && parseFloat(player.style.left) >= 5) {
             player.style.left = parseFloat(player.style.left) - 10 + "px";
         }
-        else if (key === 39) {
+        else if (key === 39 && parseFloat(player.style.left) <= 270) {
             player.style.left = parseFloat(player.style.left) + 10 + "px";
         }
         else if (key === 32)
@@ -63,8 +104,6 @@
             bullet.style.top = parseFloat(bullet.style.top) - 1 + "px";
 
             for (var j = 0; j < enemies.length; j++) {
-                //console.log(enemies[j].id);
-
                 var rect2 = enemies[j].getBoundingClientRect();
                 var rect1 = bullet.getBoundingClientRect();
 
@@ -73,13 +112,22 @@
                 if (overlap == true) {
                     bullet.remove();
                     enemies[j].remove();
+                    numberOfEnemiesRemaining--;
                     score++;
                     document.getElementById("score").innerHTML = ("Score:" + score);
+                    if (numberOfEnemiesRemaining == 0) {
+                        var text = document.getElementById("resultText");
+                        text.innerHTML = "Winner!";
+                        document.getElementById("resultText").removeAttribute("hidden"); 
+
+                        break;
+                    }
+
                     //console.log("Score!");
                     break;
                 }
             }
-            await sleep();
+            await sleep(10);
         }
 
         bullet.remove();
@@ -92,6 +140,6 @@
             rect1.top > rect2.bottom);
     }
 
-    async function sleep() {
-        await new Promise(r => setTimeout(r, 10));
+    async function sleep(step) {
+        await new Promise(r => setTimeout(r, step));
     }</script>
