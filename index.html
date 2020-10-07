@@ -1,6 +1,12 @@
 <html>
 <body onkeydown="keyPressed()">
-    <span id="player" style="position:absolute; left: 20px; top:400px">
+    <div>
+        <span name="enemy" id="enemy1" style="position:absolute;left:20px"> [---]</span>
+        <span name="enemy" id="enemy2" style="position:absolute;left:50px"> [---]</span>
+        <span name="enemy" id="enemy3" style="position:absolute;left:80px"> [---]</span>
+
+    </div>
+    <span id="player" style="position:absolute; left: 20px; top:100px">
         [T]
     </span>
 </body>
@@ -27,13 +33,13 @@
         var bullet = document.createElement('span');
         bullet.textContent = "^";
 
-        document.body.appendChild(bullet);
         bullettId++;
 
         bullet.style.left = parseFloat(posistion.style.left) + 6 + "px";
         bullet.style.top = parseFloat(posistion.style.top) - 8 + "px";
         bullet.style.position = "absolute";
         bullet.id = "bullet" + bullettId;
+        document.body.appendChild(bullet);
 
         Projectile(bullet);
     }
@@ -43,18 +49,38 @@
     async function Projectile(bullet) {
 
         var i = parseFloat(bullet.style.top);
+        var enemies = document.getElementsByName("enemy");
 
-        for (i; i >= 10;i--) {
+        for (i; i >= 1; i--) {
             bullet.style.top = parseFloat(bullet.style.top) - 1 + "px";
+
+            for (var j = 0; j < enemies.length; j++) {
+                console.log(enemies[j].id);
+
+                var rect2 = enemies[j].getBoundingClientRect();
+                var rect1 = bullet.getBoundingClientRect();
+
+                overlap = colliderDetection(rect1, rect2);
+
+                if (overlap == true) {
+                    bullet.remove();
+                    enemies[j].remove();
+                    break;
+                }
+            }
             await sleep();
         }
 
         bullet.remove();
     }
 
-    async function sleep() {
-        await new Promise(r => setTimeout(r, 10));
+    function colliderDetection(rect1, rect2) {
+        return !(rect1.right < rect2.left ||
+            rect1.left > rect2.right ||
+            rect1.bottom < rect2.top ||
+            rect1.top > rect2.bottom);
     }
 
-
-</script>
+    async function sleep() {
+        await new Promise(r => setTimeout(r, 10));
+    }</script>
