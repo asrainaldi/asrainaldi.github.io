@@ -45,7 +45,8 @@
     </div>
 
     <div class="footer">
-        <a  href="game.html">Game</a>
+        <button type="button" onclick="window.location=" game.html">Game</button>
+        <a href="game.html">Game</a>
     </div>
 
 
@@ -62,6 +63,7 @@
         color: white;
         text-align: center;
     }
+
     .button {
         position: absolute;
         height: 30px;
@@ -130,9 +132,6 @@
             document.getElementById("currentDisplays").value += "" + numberBtn;
 
         newNumberSeries = false;
-
-        console.log(newNumberSeries + " btn");
-
     }
 
     function symbolBtn(btn) {
@@ -167,8 +166,11 @@
         else if (symbol == "MC")
             MR = "";
         else if (symbol == ">") {
-            console.log(currentDisplay + " " + currentDisplay.substr(0, currentDisplay.length - 1))
-            document.getElementById("currentDisplays").value = currentDisplay.substr(0, currentDisplay.length - 1);
+
+            if (currentDisplay.substr(0, currentDisplay.length - 1) == 0)
+                document.getElementById("currentDisplays").value = 0;
+            else
+                document.getElementById("currentDisplays").value = currentDisplay.substr(0, currentDisplay.length - 1);
         }
         else if (symbol == "+/-") {
             document.getElementById("currentDisplays").value = parseFloat(currentDisplay) * -1
@@ -207,29 +209,25 @@
             decimalUsed = true;
         }
         else if (symbol == "00") {
-            if (parseFloat(currentDisplay) < 0 || currentDisplay.substr(0,2) == "0.")
+            if (parseFloat(currentDisplay) < 0 || currentDisplay.substr(0, 2) == "0.")
                 document.getElementById("currentDisplays").value += "00";
         }
         else if (symbol == "=" && symbolPending == true) {
 
             switch (currentSymbol) {
                 case "+":
-                    console.log(previousNum + " " + parseFloat(currentDisplay));
                     result = previousNum + parseFloat(currentDisplay);
                     document.getElementById("currentDisplays").value = result;
                     break;
                 case "-":
-                    console.log(previousNum + " " + parseFloat(currentDisplay));
                     result = previousNum - parseFloat(currentDisplay);
                     document.getElementById("currentDisplays").value = result;
                     break;
                 case "/":
-                    console.log(previousNum + " " + parseFloat(currentDisplay));
                     result = previousNum / parseFloat(currentDisplay);
                     document.getElementById("currentDisplays").value = result;
                     break;
                 case "*":
-                    console.log(previousNum + " " + parseFloat(currentDisplay));
                     result = previousNum * parseFloat(currentDisplay);
                     document.getElementById("currentDisplays").value = result;
                     break;
