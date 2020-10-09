@@ -1,144 +1,251 @@
 <html>
-<body onkeydown="keyPressed()">
-    <div>
-        <span name="enemy" id="enemy1" style="position:absolute;left:10px;top:40px"> [---]</span>
-        <span name="enemy" id="enemy2" style="position:absolute;left:40px;top:40px"> [---]</span>
-        <span name="enemy" id="enemy3" style="position:absolute;left:70px;top:40px"> [---]</span>
-        <span name="enemy" id="enemy4" style="position:absolute;left:100px;top:40px"> [---]</span>
-        <span name="enemy" id="enemy1" style="position:absolute;left:10px;top:60px"> [---]</span>
-        <span name="enemy" id="enemy2" style="position:absolute;left:40px;top:60px"> [---]</span>
-        <span name="enemy" id="enemy3" style="position:absolute;left:70px;top:60px"> [---]</span>
-        <span name="enemy" id="enemy4" style="position:absolute;left:100px;top:60px"> [---]</span>
-    </div>
-    <div>
-        <span id="score">Score: 0</span>
-    </div>
-    <div>
-        <span id="resultText" hidden style="position:absolute;left:100px; color:red">you lose! </span>
-    </div>
-    <span id="player" style="position:absolute; left: 20px; top:200px">
-        [T]
+<body>
+    <span>
+        <input style="text-align:right" hidden type="text" value="" id="hiddenInstructions">
     </span>
-    <span style="position:absolute; left: 20px; top:220px">
-        --------------------------------------------------
-    </span>
+    <div>
+        <span>
+            <input style="text-align:right; position:absolute; height:30px; left:12px; top:20px" type="text" readonly="readonly" value="0" id="currentDisplays">
+        </span>
+    </div>
+    <br />
+    <div>
+        <input class="button firstRow" style=" top:60px" type="button" data-value="MC" value="MC" onclick="symbolBtn(this)">
+        <input class="button firstRow" style=" top:95px" type="button" data-value="7" value="7" onclick="calc(this)">
+        <input class="button firstRow" style=" top:130px" type="button" data-value="4" value="4" onclick="calc(this)">
+        <input class="button firstRow" style=" top:165px" type="button" data-value="1" value="1" onclick="calc(this)">
+        <input class="button firstRow" style=" top:200px" type="button" data-value="0" value="0" onclick="calc(this)">
+    </div>
+    <div>
+        <input class="button secoundRow" style=" top:60px" type="button" data-value="MR" value="MR" onclick="symbolBtn(this)">
+        <input class="button secoundRow" style=" top:95px" type="button" data-value="8" value="8" onclick="calc(this)">
+        <input class="button secoundRow" style=" top:130px" type="button" data-value="5" value="5" onclick="calc(this)">
+        <input class="button secoundRow" style=" top:165px" type="button" data-value="2" value="2" onclick="calc(this)">
+        <input class="button secoundRow" style=" top:200px" type="button" data-value="00" value="00" onclick="symbolBtn(this)">
+    </div>
+    <div>
+        <input class="button thirdRow" style=" top:60px" type="button" data-value="M-" value="M-" onclick="symbolBtn(this)">
+        <input class="button thirdRow" style=" top:95px" type="button" data-value="9" value="9" onclick="calc(this)">
+        <input class="button thirdRow" style=" top:130px" type="button" data-value="6" value="6" onclick="calc(this)">
+        <input class="button thirdRow" style=" top:165px" type="button" data-value="3" value="3" onclick="calc(this)">
+        <input class="button thirdRow" style=" top:200px" type="button" data-value="." value="." onclick="symbolBtn(this)">
+    </div>
+    <div>
+        <input class="button forthRow" style=" top:60px" type="button" data-value="M+" value="M+" onclick="symbolBtn(this)">
+        <input class="button forthRow" style=" top:95px" type="button" data-value="/" value="&divide;" onclick="symbolBtn(this)">
+        <input class="button forthRow" style=" top:130px" type="button" data-value="*" value="&times" onclick="symbolBtn(this)">
+        <input class="button forthRow" style=" top:165px" type="button" data-value="-" value="&minus;" onclick="symbolBtn(this)">
+        <input class="button forthRow" style=" top:200px" type="button" data-value="+" value="&plus;" onclick="symbolBtn(this)">
+    </div>
+    <div>
+        <input class="button fithRow" style=" top:60px" type="button" data-value="C" value="C" onclick="symbolBtn(this)">
+        <input class="button fithRow" style=" top:95px" type="button" data-value="+/-" value="+/-" onclick="symbolBtn(this)">
+        <input class="button fithRow" style=" top:130px" type="button" data-value=">" value="&rarr;" onclick="symbolBtn(this)">
+        <input class="equalsBtn fithRow" style=" top:165px" type="button" data-value="=" value="=" onclick="symbolBtn(this)">
+    </div>
+
 </body>
+
 </html>
+<style>
+    .button {
+        position: absolute;
+        height: 30px;
+        width: 30px;
+    }
+
+    .firstRow {
+        left: 15px;
+    }
+
+    .secoundRow {
+        left: 50px;
+    }
+
+    .thirdRow {
+        left: 85px;
+    }
+
+    .forthRow {
+        left: 120px;
+    }
+
+    .fithRow {
+        left: 155px;
+    }
+
+    .equalsBtn {
+        position: absolute;
+        height: 65px;
+        width: 30px;
+    }
+</style>
 
 <script>
+    var result = 0;
+    var currentNumber = 0;
+    var currentCalucation = "";
+    var MR = "";
+    var symbolPending = false;
+    var currentSymbol = "";
+    var hiddenDisplay = "";
+    var previousNum;
+    var newNumberSeries = false;
+    var newCalulation = false;
+    var decimalUsed = false;
 
-    moveEnemies();
-    var numberOfEnemiesRemaining = document.getElementsByName("enemy").length;
-
-    async function moveEnemies() {
-        var enemies = document.getElementsByName("enemy");
-
-        for (var k = 0; k < 15; k++) {
-
-            for (var j = 0; j < 20; j++) {
-                for (var i = 0; i < enemies.length; i++) {
-                    enemies[i].style.left = parseFloat(enemies[i].style.left) + 10 + "px";
-                }
-                await sleep(250);
-            }
-            for (var j = 0; j < 20; j++) {
-                for (var i = 0; i < enemies.length; i++) {
-                    enemies[i].style.left = parseFloat(enemies[i].style.left) - 10 + "px";
-                }
-                await sleep(250);
-            }
-
-            for (var i = 0; i < enemies.length; i++) {
-                enemies[i].style.top = parseFloat(enemies[i].style.top) + 10 + "px";
-            }
-            await sleep(250);
-
+    function calc(btn) {
+        if (newCalulation == true) {
+            document.getElementById("currentDisplays").value = 0;
+            document.getElementById("hiddenInstructions").value = "";
+            newCalulation = false;
         }
+        var numberBtn = parseInt(btn.dataset.value);
+        currentNumber = document.getElementById("currentDisplays").value;
+        document.getElementById("hiddenInstructions").value = document.getElementById("hiddenInstructions").value + numberBtn;
 
-        if (numberOfEnemiesRemaining != 0) {
-            document.getElementById("resultText").removeAttribute("hidden");
+        if (document.getElementById("currentDisplays").value == "0")
+            document.getElementById("currentDisplays").value = numberBtn;
+        else if (symbolPending == false)
+            document.getElementById("currentDisplays").value += "" + numberBtn;
+        else if (newNumberSeries == true) {
+            document.getElementById("currentDisplays").value = "" + numberBtn;
+            newNumberSeries = false;
         }
+        else
+            document.getElementById("currentDisplays").value += "" + numberBtn;
+
+        newNumberSeries = false;
+
+        console.log(newNumberSeries + " btn");
+
     }
 
-    function keyPressed() {
-        var key = window.event.keyCode
-        var player = document.getElementById("player");
+    function symbolBtn(btn) {
 
-        // 37 left 39 right 32 spacebar
-        var test = parseFloat(player.style.left);
-        if (key === 37 && parseFloat(player.style.left) >= 5) {
-            player.style.left = parseFloat(player.style.left) - 10 + "px";
+        var symbol = btn.dataset.value;
+        document.getElementById("hiddenInstructions").value += symbol;
+
+        currentDisplay = document.getElementById("currentDisplays").value;
+        hiddenDisplay = document.getElementById("hiddenInstructions").value;
+
+        if (symbol == "C") {
+            document.getElementById("currentDisplays").value = "0";
+            document.getElementById("hiddenInstructions").value = "";
+            reset();
         }
-        else if (key === 39 && parseFloat(player.style.left) <= 270) {
-            player.style.left = parseFloat(player.style.left) + 10 + "px";
+        else if (symbol == "MR" && MR != "") {
+            document.getElementById("currentDisplays").value = MR;
         }
-        else if (key === 32)
-            fire(player);
-    }
+        else if (symbol == "M+") {
+            if (MR == "")
+                MR = parseFloat(currentDisplay);
+            else {
+                MR = parseFloat(MR) + parseFloat(currentDisplay);
+                document.getElementById("currentDisplays").value = MR;
+            }
+        }
+        else if (symbol == "M-") {
+            if (MR == "")
+                MR = -1 * parseFloat(currentDisplay);
+            else MR = parseFloat(MR) - parseFloat(currentDisplay);
+        }
+        else if (symbol == "MC")
+            MR = "";
+        else if (symbol == ">") {
+            console.log(currentDisplay + " " + currentDisplay.substr(0, currentDisplay.length - 1))
+            document.getElementById("currentDisplays").value = currentDisplay.substr(0, currentDisplay.length - 1);
+        }
+        else if (symbol == "+/-") {
+            document.getElementById("currentDisplays").value = parseFloat(currentDisplay) * -1
+        }
 
-    function fire(posistion) {
+        else if (symbol == "+") {
+            if (previousNum == undefined)
+                previousNum = parseFloat(currentDisplay);
+            else if (hiddenDisplay.substr((hiddenDisplay.length - 2), 1) != "+")
+                previousNum += parseFloat(currentDisplay);
+            setSymbolActions(symbol);
+        }
+        else if (symbol == "*") {
+            if (previousNum == undefined)
+                previousNum = parseFloat(currentDisplay);
+            else if (hiddenDisplay.substr((hiddenDisplay.length - 2), 1) != "*")
+                previousNum *= parseFloat(currentDisplay);
+            setSymbolActions(symbol);
+        }
+        else if (symbol == "-") {
+            if (previousNum == undefined)
+                previousNum = parseFloat(currentDisplay);
+            else if (hiddenDisplay.substr((hiddenDisplay.length - 2), 1) != "-")
+                previousNum -= parseFloat(currentDisplay);
+            setSymbolActions(symbol);
+        }
+        else if (symbol == "/") {
+            if (previousNum == undefined)
+                previousNum = parseFloat(currentDisplay);
+            else if (hiddenDisplay.substr((hiddenDisplay.length - 2), 1) != "/")
+                previousNum /= parseFloat(currentDisplay);
+            setSymbolActions(symbol);
+        }
+        else if (symbol == "." && decimalUsed != true) {
+            document.getElementById("currentDisplays").value = currentDisplay + ".";
+            decimalUsed = true;
+        }
+        else if (symbol == "00") {
+            if (parseFloat(currentDisplay) < 0 || currentDisplay.substr(0,2) == "0.")
+                document.getElementById("currentDisplays").value += "00";
+        }
+        else if (symbol == "=" && symbolPending == true) {
 
-        var bullet = document.createElement('span');
-        bullet.textContent = "^";
-
-        bullettId++;
-
-        bullet.style.left = parseFloat(posistion.style.left) + 6 + "px";
-        bullet.style.top = parseFloat(posistion.style.top) - 8 + "px";
-        bullet.style.position = "absolute";
-        bullet.id = "bullet" + bullettId;
-        document.body.appendChild(bullet);
-
-        Projectile(bullet);
-    }
-
-    var bullettId = 0;
-    var score = 0;
-
-    async function Projectile(bullet) {
-
-        var i = parseFloat(bullet.style.top);
-        var enemies = document.getElementsByName("enemy");
-
-        for (i; i >= 1; i--) {
-            bullet.style.top = parseFloat(bullet.style.top) - 1 + "px";
-
-            for (var j = 0; j < enemies.length; j++) {
-                var rect2 = enemies[j].getBoundingClientRect();
-                var rect1 = bullet.getBoundingClientRect();
-
-                overlap = colliderDetection(rect1, rect2);
-
-                if (overlap == true) {
-                    bullet.remove();
-                    enemies[j].remove();
-                    numberOfEnemiesRemaining--;
-                    score++;
-                    document.getElementById("score").innerHTML = ("Score:" + score);
-                    if (numberOfEnemiesRemaining == 0) {
-                        var text = document.getElementById("resultText");
-                        text.innerHTML = "Winner!";
-                        document.getElementById("resultText").removeAttribute("hidden");
-                        break;
-                    }
-
-                    //console.log("Score!");
+            switch (currentSymbol) {
+                case "+":
+                    console.log(previousNum + " " + parseFloat(currentDisplay));
+                    result = previousNum + parseFloat(currentDisplay);
+                    document.getElementById("currentDisplays").value = result;
                     break;
-                }
+                case "-":
+                    console.log(previousNum + " " + parseFloat(currentDisplay));
+                    result = previousNum - parseFloat(currentDisplay);
+                    document.getElementById("currentDisplays").value = result;
+                    break;
+                case "/":
+                    console.log(previousNum + " " + parseFloat(currentDisplay));
+                    result = previousNum / parseFloat(currentDisplay);
+                    document.getElementById("currentDisplays").value = result;
+                    break;
+                case "*":
+                    console.log(previousNum + " " + parseFloat(currentDisplay));
+                    result = previousNum * parseFloat(currentDisplay);
+                    document.getElementById("currentDisplays").value = result;
+                    break;
+                default:
+                    break;
             }
-            await sleep(10);
+
+            reset()
         }
-
-        bullet.remove();
     }
 
-    function colliderDetection(rect1, rect2) {
-        return !(rect1.right < rect2.left ||
-            rect1.left > rect2.right ||
-            rect1.bottom < rect2.top ||
-            rect1.top > rect2.bottom);
+    function setSymbolActions(symbol) {
+        currentSymbol = symbol;
+        symbolPending = true;
+        newNumberSeries = true;
+        decimalUsed = false;
     }
 
-    async function sleep(step) {
-        await new Promise(r => setTimeout(r, step));
-    }</script>
+    function reset() {
+        decimalUsed = false;
+        result = 0;
+        currentNumber = 0;
+        currentCalucation = "";
+        symbolPending = false;
+        currentSymbol = "";
+        hiddenDisplay = "";
+        previousNum = undefined;
+        newNumberSeries = false;
+        symbol = "";
+        newCalulation = true;
+    }
+
+</script>
