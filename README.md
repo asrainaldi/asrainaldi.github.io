@@ -1,42 +1,51 @@
-# What was the challenge?
-
-## Week 4 Challenge
+# Mentored Project
 
 ## Tasks
 
-For this week's challenge, you are tasked with meeting the following requirements: 
+You are tasked with creating a HR application which contains employee information, you must capture the following data: 
 
-- Implement all of the functionality you see on the following image:
+* Employee's NI Number
+* Employee's Full Name
+* Employee's Phone number
+* Employee's Address
+* Employee's Department
 
-![Image](https://i.imgur.com/LP1yOUH.png)
+> *Note: Please don't use anybody's real information - dummy information is perfectly fine* 
+
+The above information should be stored in an Array as JSON data. **(There is no need for any DBMS - Database Management System)**
+
+You must meet the following requirements: 
+* The project must be written in PURE JavaScript
+* All the employee information should be displayed on the screen
+* Users must be able to add an employee to the list
+* Users must be able to edit employee information 
+* Users must be able to delete an employee
+* Users must be able to filter the list of employees based on their department through a dropdown box / search bar - i.e. HR, Sales etc.
+* You must create separate files for your HTML, JS, CSS etc. 
+
+Be as creative as you'd like with the design of the application. 
 
 ## Stretch Goals
 
-Implement the functionality of the following buttons: 
-- MC (Memory Clear)
-- MR (Memory Recall)
-- M+ (Memory Add)
-- M- (Memory Subtract)
+Look at incorporating CSS or a front-end framework to improve the design of your application.
 
-The final result should look something like this:
+## Submission 
 
-![Stretch](https://i.imgur.com/fwaqB4J.png)
+You should create a Git repository that contains the code for the application. 
+You are also expected to make a README.md file and to fill this README with information of this project. 
+It should contain the following headers:
 
-
-
-## Submission
-
-You should create a public Github repository that contains the code for the calculator.
-You are also expected to make a README.md file and to fill this README with information of this challenge. It should contain the following headers.
+## Why are we doing this?
+To learn web stuff.
 
 ## How I expected the challenge to go.
-I thought it might take me awhile as it takes me ahwile to write JavaScript.
+Fairly well
 
 ## What went well?
-Implmented the functionality including edge cases.
+Inital design was quick to make
 
 ## What didn't go as planned?
-Couldent think of an easier way of implementing the logic 
+Not much
 
-## Possible improvements for future challenges
-Noithing comes to mind.
+## Possible improvements for future revisions of the project. 
+Stretch goal could include an api endpoint to get data from.

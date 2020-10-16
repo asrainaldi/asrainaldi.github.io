@@ -1,0 +1,9 @@
+.error {
+    border-color: red !important;
+}
+.hover {
+    cursor: pointer;
+}
+input:focus::placeholder {
+    color: transparent;
+}

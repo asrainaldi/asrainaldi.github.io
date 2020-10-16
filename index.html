@@ -1,262 +1,59 @@
-<html>
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+    <script src="data\Records.json" type="text/javascript"></script>
+    <script src="scripts\functions\employeeFunc.js" type="text/javascript"></script>
+    <script src="scripts\functions\index.js" type="text/javascript"></script>
+    <script src="scripts\functions\tableInit.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="css\main.css"/>
+    <meta charset="utf-8" />
+
+    <title>Employee manager</title>
+</head>
 <body>
-    <span>
-        <input style="text-align:right" hidden type="text" value="" id="hiddenInstructions">
-    </span>
-    <div>
-        <span>
-            <input style="text-align:right; position:absolute; height:30px; left:12px; top:20px" type="text" readonly="readonly" value="0" id="currentDisplays">
-        </span>
+    <div class="jumbotron">
+        <div class="container">
+            <h2>
+                Employee Manager
+            </h2>
+            <form action="html\NewEmployee.html">
+                <button type="submit" class="btn btn-primary"> New Employee</button>
+            </form>
+        </div>
     </div>
-    <br />
-    <div>
-        <input class="button firstRow" style=" top:60px" type="button" data-value="MC" value="MC" onclick="symbolBtn(this)">
-        <input class="button firstRow" style=" top:95px" type="button" data-value="7" value="7" onclick="calc(this)">
-        <input class="button firstRow" style=" top:130px" type="button" data-value="4" value="4" onclick="calc(this)">
-        <input class="button firstRow" style=" top:165px" type="button" data-value="1" value="1" onclick="calc(this)">
-        <input class="button firstRow" style=" top:200px" type="button" data-value="0" value="0" onclick="calc(this)">
-    </div>
-    <div>
-        <input class="button secoundRow" style=" top:60px" type="button" data-value="MR" value="MR" onclick="symbolBtn(this)">
-        <input class="button secoundRow" style=" top:95px" type="button" data-value="8" value="8" onclick="calc(this)">
-        <input class="button secoundRow" style=" top:130px" type="button" data-value="5" value="5" onclick="calc(this)">
-        <input class="button secoundRow" style=" top:165px" type="button" data-value="2" value="2" onclick="calc(this)">
-        <input class="button secoundRow" style=" top:200px" type="button" data-value="00" value="00" onclick="symbolBtn(this)">
-    </div>
-    <div>
-        <input class="button thirdRow" style=" top:60px" type="button" data-value="M-" value="M-" onclick="symbolBtn(this)">
-        <input class="button thirdRow" style=" top:95px" type="button" data-value="9" value="9" onclick="calc(this)">
-        <input class="button thirdRow" style=" top:130px" type="button" data-value="6" value="6" onclick="calc(this)">
-        <input class="button thirdRow" style=" top:165px" type="button" data-value="3" value="3" onclick="calc(this)">
-        <input class="button thirdRow" style=" top:200px" type="button" data-value="." value="." onclick="symbolBtn(this)">
-    </div>
-    <div>
-        <input class="button forthRow" style=" top:60px" type="button" data-value="M+" value="M+" onclick="symbolBtn(this)">
-        <input class="button forthRow" style=" top:95px" type="button" data-value="/" value="&divide;" onclick="symbolBtn(this)">
-        <input class="button forthRow" style=" top:130px" type="button" data-value="*" value="&times" onclick="symbolBtn(this)">
-        <input class="button forthRow" style=" top:165px" type="button" data-value="-" value="&minus;" onclick="symbolBtn(this)">
-        <input class="button forthRow" style=" top:200px" type="button" data-value="+" value="&plus;" onclick="symbolBtn(this)">
-    </div>
-    <div>
-        <input class="button fithRow" style=" top:60px" type="button" data-value="C" value="C" onclick="symbolBtn(this)">
-        <input class="button fithRow" style=" top:95px" type="button" data-value="+/-" value="+/-" onclick="symbolBtn(this)">
-        <input class="button fithRow" style=" top:130px" type="button" data-value=">" value="&rarr;" onclick="symbolBtn(this)">
-        <input class="equalsBtn fithRow" style=" top:165px" type="button" data-value="=" value="=" onclick="symbolBtn(this)">
+    <div class="container">
+        <div class="col-lg-8">
+            <label class="col-md-6"for="selectList">Select to filter by Department</label>
+            <select class="col-md-6 form-control" id="selectList" onchange="filterTable()">
+                <option>-- Select Depertment --</option>
+            </select>
+        </div>
     </div>
 
-    <div class="footer">
-        <button type="button" onclick='window.location="game.html"' game.html">Game</button>
+    <div class="container">
+
+        <div class="col-lg-12">
+            <div id="table">
+                <table class="table table-striped" id="employeeTable">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
-
+    <div>
+        <input type="button" value="reset" onclick="reset()" />
+    </div>
 </body>
-
 </html>
-<style>
 
-    .footer {
-        position: fixed;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        color: white;
-        text-align: center;
-    }
-
-    .button {
-        position: absolute;
-        height: 30px;
-        width: 30px;
-    }
-
-    .firstRow {
-        left: 15px;
-    }
-
-    .secoundRow {
-        left: 50px;
-    }
-
-    .thirdRow {
-        left: 85px;
-    }
-
-    .forthRow {
-        left: 120px;
-    }
-
-    .fithRow {
-        left: 155px;
-    }
-
-    .equalsBtn {
-        position: absolute;
-        height: 65px;
-        width: 30px;
-    }
-</style>
-
-<script>
-    var result = 0;
-    var currentNumber = 0;
-    var currentCalucation = "";
-    var MR = "";
-    var symbolPending = false;
-    var currentSymbol = "";
-    var hiddenDisplay = "";
-    var previousNum;
-    var newNumberSeries = false;
-    var newCalulation = false;
-    var decimalUsed = false;
-
-    function calc(btn) {
-        if (newCalulation == true) {
-            document.getElementById("currentDisplays").value = 0;
-            document.getElementById("hiddenInstructions").value = "";
-            newCalulation = false;
-        }
-        var numberBtn = parseInt(btn.dataset.value);
-        currentNumber = document.getElementById("currentDisplays").value;
-        document.getElementById("hiddenInstructions").value = document.getElementById("hiddenInstructions").value + numberBtn;
-
-        if (document.getElementById("currentDisplays").value == "0")
-            document.getElementById("currentDisplays").value = numberBtn;
-        else if (symbolPending == false)
-            document.getElementById("currentDisplays").value += "" + numberBtn;
-        else if (newNumberSeries == true) {
-            document.getElementById("currentDisplays").value = "" + numberBtn;
-            newNumberSeries = false;
-        }
-        else
-            document.getElementById("currentDisplays").value += "" + numberBtn;
-
-        newNumberSeries = false;
-    }
-
-    function symbolBtn(btn) {
-
-        var symbol = btn.dataset.value;
-        document.getElementById("hiddenInstructions").value += symbol;
-
-        currentDisplay = document.getElementById("currentDisplays").value;
-        hiddenDisplay = document.getElementById("hiddenInstructions").value;
-
-        if (symbol == "C") {
-            document.getElementById("currentDisplays").value = "0";
-            document.getElementById("hiddenInstructions").value = "";
-            reset();
-        }
-        else if (symbol == "MR" && MR != "") {
-            document.getElementById("currentDisplays").value = MR;
-        }
-        else if (symbol == "M+") {
-            if (MR == "")
-                MR = parseFloat(currentDisplay);
-            else {
-                MR = parseFloat(MR) + parseFloat(currentDisplay);
-                document.getElementById("currentDisplays").value = MR;
-            }
-        }
-        else if (symbol == "M-") {
-            if (MR == "")
-                MR = -1 * parseFloat(currentDisplay);
-            else MR = parseFloat(MR) - parseFloat(currentDisplay);
-        }
-        else if (symbol == "MC")
-            MR = "";
-        else if (symbol == ">") {
-
-            if (currentDisplay.substr(0, currentDisplay.length - 1) == 0)
-                document.getElementById("currentDisplays").value = 0;
-            else
-                document.getElementById("currentDisplays").value = currentDisplay.substr(0, currentDisplay.length - 1);
-        }
-        else if (symbol == "+/-") {
-            document.getElementById("currentDisplays").value = parseFloat(currentDisplay) * -1
-        }
-
-        else if (symbol == "+") {
-            if (previousNum == undefined)
-                previousNum = parseFloat(currentDisplay);
-            else if (hiddenDisplay.substr((hiddenDisplay.length - 2), 1) != "+")
-                previousNum += parseFloat(currentDisplay);
-            setSymbolActions(symbol);
-        }
-        else if (symbol == "*") {
-            if (previousNum == undefined)
-                previousNum = parseFloat(currentDisplay);
-            else if (hiddenDisplay.substr((hiddenDisplay.length - 2), 1) != "*")
-                previousNum *= parseFloat(currentDisplay);
-            setSymbolActions(symbol);
-        }
-        else if (symbol == "-") {
-            if (previousNum == undefined)
-                previousNum = parseFloat(currentDisplay);
-            else if (hiddenDisplay.substr((hiddenDisplay.length - 2), 1) != "-")
-                previousNum -= parseFloat(currentDisplay);
-            setSymbolActions(symbol);
-        }
-        else if (symbol == "/") {
-            if (previousNum == undefined)
-                previousNum = parseFloat(currentDisplay);
-            else if (hiddenDisplay.substr((hiddenDisplay.length - 2), 1) != "/")
-                previousNum /= parseFloat(currentDisplay);
-            setSymbolActions(symbol);
-        }
-        else if (symbol == "." && decimalUsed != true) {
-            document.getElementById("currentDisplays").value = currentDisplay + ".";
-            decimalUsed = true;
-        }
-        else if (symbol == "00") {
-            if (parseFloat(currentDisplay) < 0 || currentDisplay.substr(0, 2) == "0.")
-                document.getElementById("currentDisplays").value += "00";
-        }
-        else if (symbol == "=" && symbolPending == true) {
-
-            switch (currentSymbol) {
-                case "+":
-                    result = previousNum + parseFloat(currentDisplay);
-                    document.getElementById("currentDisplays").value = result;
-                    break;
-                case "-":
-                    result = previousNum - parseFloat(currentDisplay);
-                    document.getElementById("currentDisplays").value = result;
-                    break;
-                case "/":
-                    result = previousNum / parseFloat(currentDisplay);
-                    document.getElementById("currentDisplays").value = result;
-                    break;
-                case "*":
-                    result = previousNum * parseFloat(currentDisplay);
-                    document.getElementById("currentDisplays").value = result;
-                    break;
-                default:
-                    break;
-            }
-
-            reset()
-        }
-    }
-
-    function setSymbolActions(symbol) {
-        currentSymbol = symbol;
-        symbolPending = true;
-        newNumberSeries = true;
-        decimalUsed = false;
-    }
-
-    function reset() {
-        decimalUsed = false;
-        result = 0;
-        currentNumber = 0;
-        currentCalucation = "";
-        symbolPending = false;
-        currentSymbol = "";
-        hiddenDisplay = "";
-        previousNum = undefined;
-        newNumberSeries = false;
-        symbol = "";
-        newCalulation = true;
-    }
-
-</script>
