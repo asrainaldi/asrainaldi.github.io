@@ -29,7 +29,7 @@
                             <span class="icon-bar"></span>
                         </button>
                         <a class="navbar-brand" href="#">
-                            <img style="width:40px; top:-10px; position:relative" class="img-circle img-responsive img-bordered-primary" src="amigo.jpg" alt="John Doe">
+                            <img style="width:40px; top:-10px; position:relative" class="img-circle img-responsive img-bordered-primary" src="images\amigo.jpg" alt="John Doe">
                         </a>
                     </div>
 
@@ -57,19 +57,6 @@
                             </div>
                             <button type="submit" class="btn btn-default">Submit</button>
                         </form>
-                        <!--<ul class="nav navbar-nav navbar-right">
-                            <li><a href="#">Link</a></li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Action</a></li>
-                                    <li><a href="#">Another action</a></li>
-                                    <li><a href="#">Something else here</a></li>
-                                    <li role="separator" class="divider"></li>
-                                    <li><a href="#">Separated link</a></li>
-                                </ul>
-                            </li>
-                        </ul>-->
                     </div><!-- /.navbar-collapse -->
                 </div><!-- /.container-fluid -->
             </nav>
@@ -149,15 +136,36 @@
                             </div><!-- /.panel-heading -->
                             <div class="panel-body no-padding">
                                 <div class="inner-all block">
-                                    <h4>Upload on my album :D</h4>
+                                    <h4>jQuery ajax handle 401 Unauthorized</h4>
                                     <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita, iste omnis fugiat porro consequuntur ratione iure error reprehenderit cum est ab similique magnam molestias aperiam voluptatibus quia aliquid! Sed, minima.
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita, iste omnis fugiat porro consequuntur ratione iure error reprehenderit cum est ab similique magnam molestias aperiam voluptatibus quia aliquid! Sed, minima.
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita, iste omnis fugiat porro consequuntur ratione iure error reprehenderit cum est ab similique magnam molestias aperiam voluptatibus quia aliquid! Sed, minima.
-
+                                        I am calling third party web page using jQuery ajax. According to their page they sent me status code 200 if log-in success and 401 if log-in unsuccessful.
+                                        Here is my jquery code sample. This code works fine on IE but not work on Chrome or Firefox. What could be the issue?
                                     </p>
-                                    <blockquote class="mb-10">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, delectus!</blockquote>
-
+                                    <code>
+                                        $.ajax({
+                                        type: 'GET',
+                                        url: hostURL + 'j_teo_security_check?callback=?',
+                                        dataType: 'json',
+                                        data: ({j_username : $("#inp_user_name").val(), j_password: $("#inp_user_pwd").val()}),
+                                        statusCode: {
+                                        401:function() { alert("401"); },
+                                        404:function() { alert("404"); },
+                                        200:function() { alert("200"); },
+                                        201:function() { alert("201"); },
+                                        202:function() { alert("202"); }
+                                        },
+                                        complete: function(httpObj, textStatus){
+                                        alert(httpObj.status);
+                                        },
+                                        error: function(){
+                                        alert("error");
+                                        },
+                                        async: false
+                                        });
+                                    </code>
+                                    <p>
+                                        I tried all the functions error, success, complete, and statusCode. None of them handle the 401 error.
+                                    </p>
                                 </div><!-- /.inner-all -->
 
                             </div><!-- /.panel-body -->
@@ -186,9 +194,33 @@
                             <div class="panel-body no-padding">
                                 <!--<img src="https://via.placeholder.com/340x210/" alt="..." class="img-responsive full-width">-->
                                 <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita, iste omnis fugiat porro consequuntur ratione iure error reprehenderit cum est ab similique magnam molestias aperiam voluptatibus quia aliquid! Sed, minima.
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita, iste omnis fugiat porro consequuntur ratione iure error reprehenderit cum est ab similique magnam molestias aperiam voluptatibus quia aliquid! Sed, minima.
+                                    I could fix it as bellow.
+                                </p>
+                                <code>
+                                    $(document).ready(function(){
+                                    $("#cmdLogin").click(function(){
+                                    var request = $.ajax({
+                                    url : hostURL + 'j_teo_security_check',
+                                    data: ({j_username : $("#inp_user_name").val(), j_password: $("#inp_user_pwd").val()}),
+                                    dataType : "jsonp",
+                                    timeout : 5000
+                                    });
 
+                                    request.success(function() {
+                                    loginSuccess();
+                                    });
+
+                                    request.error(function(httpObj, textStatus) {
+                                    if(httpObj.status==200)
+                                    loginSuccess();
+                                    else
+                                    loginFail();
+                                    });
+                                    });
+                                    })
+                                </code>
+                                <p>
+                                    What I did was added timeout since 401 error never came back. Since it goes to error function even with status code 200 and parsing errors I made it to ignore status 200 inside the error.
                                 </p>
                                 <div class="inner-all block">
                                     view all <a href="#">7 comments</a>
